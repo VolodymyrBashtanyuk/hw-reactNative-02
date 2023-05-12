@@ -1,17 +1,22 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, ImageBackground } from 'react-native';
+
+import { StyleSheet, Text, View, ImageBackground, TextInput, Button } from 'react-native';
 
 export default function App() {
   return (
     <View style={styles.container}>
       <ImageBackground style={styles.image} source={require('./assets/images/image-app.jpeg')}>
-          <View style={styles.textBox}>
-            <Text style={styles.text}>My first App!!!Started!!!!Learning React-Native?</Text>
-            <Text style={styles.text}>Program started :)!!!</Text>
-            <Text style={styles.text}>Congratulation!!!!!!</Text>
+        <View style={styles.form}>
+          <View>
+            <Text style={styles.imputTitle}>Email adress</Text>
+            <TextInput style={styles.input} textAlign={'center'} />
           </View>
-
-        <StatusBar style="auto" />
+          <View style={{marginTop: 20}}>
+            <Text style={styles.imputTitle}>Password</Text>
+            <TextInput style={styles.input} textAlign={'center'} secureTextEntry={true} />
+          </View>
+          <Button title='SING IN'/>
+        </View>
+       
       </ImageBackground>
 
     </View>
@@ -24,22 +29,25 @@ const styles = StyleSheet.create({
     flex: 1,
     
   },
-  text: {
-    color: '#fee1d3',
-    fontSize: 30,
-  },
-  textBox: {
-    borderWidth: 2,
-    borderColor: '#fd3412',
-    padding: 20,
-    borderRadius: 20,
-    marginRight: 10,
-    marginLeft: 10,
-    
-  },
   image: {
     flex: 1,
     justifyContent: 'center',
+    // alignItems: 'center',
     resizeMode: 'cover',
+  },
+  form: {
+    marginHorizontal: 20,
+
+  },
+  imputTitle: {
+    color: '#f0f8ff', 
+    marginBottom: 10,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#f0f8ff',
+    height: 40,
+    borderRadius: 10,
+    color: '#f0f8ff',
   }
 });
