@@ -1,35 +1,44 @@
 import { useState } from 'react';
 // import React {useState} from 'react';
 
-import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView} from 'react-native';
+import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback} from 'react-native';
 
 export default function App() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
+
+  const keyboardHide= () => {
+    setIsShowKeyboard(false);
+    Keyboard.dismiss();
+  }
   return (
+      <TouchableWithoutFeedback onPress={keyboardHide}>
+
     <View style={styles.container}>
+        <ImageBackground style={styles.image} source={require('./assets/images/image-app.jpeg')}>
+        <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
-      <ImageBackground style={styles.image} source={require('./assets/images/image-app.jpeg')}>
-      <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-
-      <View style={{...styles.form, marginBottom: isShowKeyboard ? 50: 10}}>
-          <View>
-            <Text style={styles.imputTitle}>Email adress</Text>
-            <TextInput style={styles.input} textAlign={'center'} onFocus={()=>setIsShowKeyboard(true)}/>
-          </View>
-          <View style={{marginTop: 20}}>
-            <Text style={styles.imputTitle}>Password</Text>
-            <TextInput style={styles.input} textAlign={'center'} secureTextEntry={true} onFocus={()=>setIsShowKeyboard(true)}/>
-          </View>
-          <TouchableOpacity activeOpacity={0.8} style={styles.btn} >
-              <Text style={styles.btnTitle}>SIGN IN</Text>
-          </TouchableOpacity>
-          </View>
-      </KeyboardAvoidingView>
-          
-       
-      </ImageBackground>
+            <View style={{ ...styles.form, marginBottom: isShowKeyboard ? 50 : 10  }}>
+              <View style={styles.header}>
+                <Text style={styles.headerTitle}>Registration form</Text>
+              </View>
+              <View>
+                <Text style={styles.imputTitle}>Email adress</Text>
+                <TextInput style={styles.input} textAlign={'center'} onFocus={() => setIsShowKeyboard(true)}/>
+              </View>
+              <View style={{marginTop: 20}}>
+                <Text style={styles.imputTitle}>Password</Text>
+                <TextInput style={styles.input} textAlign={'center'} secureTextEntry={true} onFocus={() => setIsShowKeyboard(true)}/>
+              </View>
+              <TouchableOpacity activeOpacity={0.8} style={styles.btn} onPress={ keyboardHide}>
+                  <Text style={styles.btnTitle}>SIGN IN</Text>
+              </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
+        </ImageBackground>
 
     </View>
+      </TouchableWithoutFeedback>
+
 
   );
 }
@@ -49,6 +58,15 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     // marginBottom: 50,
 
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 100,
+  },
+  headerTitle: {
+    color: '#f0f8ff',
+    fontSize: 30,
+    
   },
   imputTitle: {
     color: '#f0f8ff', 
