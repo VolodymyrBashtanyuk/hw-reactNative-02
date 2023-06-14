@@ -1,13 +1,16 @@
-import { useFonts } from 'expo-font';
+// import { useFonts } from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
-import { useState, useCallback} from 'react';
-// import * as Font from 'expo-font';
+import { useState, useCallback, useEffect} from 'react';
+import * as Font from 'expo-font';
+import {
+  DancingScript_400Regular,
+  DancingScript_500Medium,
+  DancingScript_600SemiBold,
+  DancingScript_700Bold,
+} from '@expo-google-fonts/dancing-script';
+import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback, useWindowDimensions } from 'react-native';
 
-// import React {useState} from 'react';
-
-import { StyleSheet, Text, View, ImageBackground, TextInput, TouchableOpacity, Platform, KeyboardAvoidingView, Keyboard, TouchableWithoutFeedback} from 'react-native';
-
-SplashScreen.preventAutoHideAsync();
+// SplashScreen.preventAutoHideAsync();
 
 const data = {
     email: '',
@@ -18,19 +21,49 @@ const data = {
 
 export default function App() {
   const [isShowKeyboard, setIsShowKeyboard] = useState(false);
-  const [colectData, setColectData] = useState(data);
+  const [colectData, setColectData] = useState(data);  
+  const [appIsReady, setAppIsReady] = useState(false);
 
- const [fontsLoaded] = useFonts({
-    'DancingScript-Regular': require('./assets/fonts/DancingScript-Regular.ttf'),
-  });
+  const {height, width} = useWindowDimensions();
+
+
+  // useEffect(() => {
+  //   const onChange = () => {
+  //     // const width = Dimensions.get('window').width;
+  //     width
+  console.log("width", width)
+  console.log("height", height)
+  //   }
+  //   // Dimensions.addEventListener("change", onChange);
+  //   // return () => {
+  //   //   Dimensions.removeEventListener("change", onChange);
+  //   // }
+  // },[])
+
+
+  useEffect(() => {
+    (async () => {
+      try {
+        await SplashScreen.preventAutoHideAsync();
+        await Font.loadAsync({ DancingScript_400Regular , DancingScript_500Medium, DancingScript_600SemiBold, DancingScript_700Bold});
+      }
+      catch {
+        // handle error
+      }
+      finally {
+        setAppIsReady(true);
+      }
+    })();
+  }, []);
+
 
   const onLayoutRootView = useCallback(async () => {
-    if (fontsLoaded) {
+    if (appIsReady) {
       await SplashScreen.hideAsync();
     }
-  }, [fontsLoaded]);
+  }, [appIsReady]);
 
-  if (!fontsLoaded) {
+  if (!appIsReady) {
     return null;
   }
 
@@ -50,13 +83,15 @@ export default function App() {
 
 
   return (
-      <TouchableWithoutFeedback onPress={keyboardVanish}>
+   
+       <TouchableWithoutFeedback onPress={keyboardVanish} >
 
-    <View style={styles.container} onLayout={onLayoutRootView}>
+    <View style={styles.container} onLayout={onLayoutRootView} >
         <ImageBackground style={styles.image} source={require('./assets/images/image-app.jpeg')}>
         <KeyboardAvoidingView behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
 
-            <View style={{ ...styles.form, marginBottom: isShowKeyboard ? 50 : 10  }}>
+    
+            <View style={{ ...styles.form, marginBottom: isShowKeyboard ? 50 : 10, marginHorizontal: width > 800 ? 50 : 20,}}>
               <View style={styles.header}>
                 <Text style={styles.headerTitle  }>Registration form</Text>
               </View>
@@ -90,6 +125,8 @@ export default function App() {
 
     </View>
       </TouchableWithoutFeedback>
+     
+      
 
 
   );
@@ -98,9 +135,6 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // fontFamily: 'DancingScript-Regular',
-    // fontSize: 25,
-    
   },
   image: {
     flex: 1,
@@ -109,22 +143,24 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   form: {
-    marginHorizontal: 20,
+    // marginHorizontal: Dimensions.get("window").width > 800 ? 50: 20,
     // marginBottom: 50,
+    // width: width > 800 ? 60: 20,
 
   },
   header: {
     alignItems: 'center',
-    marginBottom: 100,
+    marginBottom: 80,
   },
   headerTitle: {
+    fontFamily:'DancingScript_700Bold',
     color: '#f0f8ff',
-    fontSize: 30,
-    // fontFamily: 'DancingScript-Regular',
+    fontSize: 45,
     
   },
   imputTitle: {
-    // fontFamily: 'DancingScript-Regular',
+    fontFamily: 'DancingScript_400Regular',
+    fontSize: 30,
     color: '#f0f8ff', 
     marginBottom: 10,
   },
@@ -155,7 +191,8 @@ const styles = StyleSheet.create({
 
   },
   btnTitle: {
+        fontFamily:'DancingScript_700Bold',
     color: '#f0f8ff',
-    fontSize: 18,
+    fontSize: 30,
   }
 });
